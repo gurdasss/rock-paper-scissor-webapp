@@ -1,48 +1,65 @@
 /*
     I'm thinking about adding shortcut keys to this project.
 */
-let userScore = 0;
-let compScore = 0;
-
 const ROCK = "rock";
 const PAPER = "paper";
 const SCISSOR = "scissor";
-const MAX_ROUNDS = 5;
 
-let gameLoop = true;
-let currentRound = 1;
+const userHand = document.querySelector("#user-hand");
+const compHand = document.querySelector("#comp-hand");
 
-let lastUserEnteredVal = ROCK;
-
-function getUserInput(lastEnteredVal) {
-    // Assuming that user will always enter a valid choice
-    return prompt("Enter your choice: ", lastEnteredVal);
+function setHand(hand, choice, type) {
+  hand.setAttribute(
+    "src",
+    "/assets/rps-kawaii_" + choice.toLowerCase() + type.toUpperCase() + ".png"
+  );
 }
+
+const setUserHand = (hand) => setHand(userHand, hand, "B");
+const setCompHand = (hand) => setHand(compHand, hand, "R");
 
 function getCompInput() {
-
-    switch (Math.floor(Math.random() * 3)) {
-        case 0: return ROCK;
-        case 1: return PAPER;
-        case 2: return SCISSOR;
-    }
-    return "???";
+  switch (Math.floor(Math.random() * 3)) {
+    case 0:
+      return ROCK;
+    case 1:
+      return PAPER;
+    case 2:
+      return SCISSOR;
+  }
+  return "???";
 }
 
-while (currentRound < MAX_ROUNDS) {
-    let userInput = getUserInput(lastUserEnteredVal);
-    let compInput = getCompInput();
+const userScoreText = document.querySelector("#user-score");
+const compScoreText = document.querySelector("#comp-score");
+let userScore = 0;
+let compScore = 0;
 
-    if (!userInput) continue;
+function playRound(userChoice, compChoice) {
+  setCompHand(compChoice);
+  setUserHand(userChoice);
 
-    if (userInput === compInput) console.log("It's a tie!");
-    else if ((userInput === ROCK && compInput === PAPER) ||
-        (userInput === PAPER && compInput === SCISSOR)) {
-        ++compScore;
-        console.log("Computer win!");
-    }
-    else { ++userScore; console.log("You win!") }
+  /* Tie! */
+  if (userChoice === compChoice);
+  else if (
+    (userChoice === ROCK && compChoice === PAPER) ||
+    (userChoice === PAPER && compChoice === SCISSOR) ||
+    (userChoice === SCISSOR && compChoice === ROCK)
+  )
+    ++compScore;
+  else ++userScore;
 
-    ++currentRound;
-    lastUserEnteredVal = userInput;
+  userScoreText.textContent = userScore;
+  compScoreText.textContent = compScore;
 }
+
+const rockButton = document.querySelector("#rock-btn");
+rockButton.addEventListener("click", () => playRound(ROCK, getCompInput()));
+
+const paperButton = document.querySelector("#paper-btn");
+paperButton.addEventListener("click", () => playRound(PAPER, getCompInput()));
+
+const scissorButton = document.querySelector("#scissor-btn");
+scissorButton.addEventListener("click", () =>
+  playRound(SCISSOR, getCompInput())
+);
