@@ -11,7 +11,7 @@ const compHand = document.querySelector("#comp-hand");
 function setHand(hand, choice, type) {
   hand.setAttribute(
     "src",
-    "/assets/rps-kawaii_" + choice.toLowerCase() + type.toUpperCase() + ".png"
+    "assets/rps-kawaii_" + choice.toLowerCase() + type.toUpperCase() + ".png"
   );
 }
 
